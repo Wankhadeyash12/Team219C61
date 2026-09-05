@@ -6,7 +6,7 @@ CivicPulse is a civic intelligence workspace for reporting local issues, trackin
 
 ## Run locally
 
-Prerequisites: Node.js 20+, npm, and MongoDB Community Server running locally.
+Prerequisites: Node.js 20+, npm, and a MongoDB Atlas cluster.
 
 ```powershell
 npm install
@@ -20,7 +20,7 @@ Open `http://localhost:5173` for the client and `http://localhost:5000/api/healt
 If MongoDB is installed as a Windows service:
 
 ```powershell
-net start MongoDB
+The application uses MongoDB Atlas through `MONGODB_URI`; no local MongoDB service is required.
 ```
 
 ## Demo accounts
@@ -44,7 +44,7 @@ The citizen, field worker, and admin accounts use password `CivicPulse2026!`.
 
 ## Configuration
 
-Copy `.env.example` to `.env`. `MONGODB_URI` defaults to `mongodb://127.0.0.1:27017/civicpulse`; replacing it with a MongoDB Atlas connection string requires no database code changes. `AI_PROVIDER` and `AI_API_KEY` are intentionally optional. Without a configured provider, the API returns an explicit unavailable response instead of claiming an AI result.
+Copy `.env.example` to `.env` and set `MONGODB_URI` to your MongoDB Atlas connection string. `AI_PROVIDER` and `AI_API_KEY` are intentionally optional. Without a configured provider, the API returns an explicit unavailable response instead of claiming an AI result.
 
 ## Structure
 
