@@ -11,11 +11,12 @@ const Issue = mongoose.model('Issue', issueSchema)
 const Department = mongoose.model('Department', departmentSchema)
 const FieldTeam = mongoose.model('FieldTeam', fieldTeamSchema)
 const password = await bcrypt.hash('CivicPulse2026!', 12)
+const authorityPassword = await bcrypt.hash('admin', 12)
 await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/civicpulse')
 await User.deleteMany({ email: { $in: ['citizen@demo.com', 'authority@demo.com', 'worker@demo.com', 'admin@demo.com'] } })
 const users = await User.insertMany([
   { name: 'Arjun Sharma', email: 'citizen@demo.com', password, role: 'CITIZEN' },
-  { name: 'Meera Joshi', email: 'authority@demo.com', password, role: 'AUTHORITY' },
+  { name: 'Meera Joshi', email: 'authority@demo.com', password: authorityPassword, role: 'AUTHORITY' },
   { name: 'Ravi Patil', email: 'worker@demo.com', password, role: 'FIELD_WORKER' },
   { name: 'CivicPulse Admin', email: 'admin@demo.com', password, role: 'ADMIN' },
 ])
@@ -36,5 +37,5 @@ await Issue.insertMany([
   { issueId: 'CIV-DEMO-1042', title: 'Large pothole near school crossing', description: 'Deep road damage creating a risk for two-wheelers.', category: 'POTHOLE', address: 'Civil Lines, Nagpur', status: 'IN_PROGRESS', severity: 'CRITICAL', priorityScore: 9.8, location: { type: 'Point', coordinates: [79.0882, 21.1458] }, reportedBy: users[0]._id, timeline: [{ label: 'Reported', at: new Date() }, { label: 'Assigned', at: new Date() }] },
   { issueId: 'CIV-DEMO-1048', title: 'Water leakage on main road', description: 'Continuous leakage near the Dharampeth junction.', category: 'WATER_LEAKAGE', address: 'Dharampeth, Nagpur', status: 'REPORTED', severity: 'HIGH', priorityScore: 8.6, location: { type: 'Point', coordinates: [79.062, 21.135] }, reportedBy: users[0]._id, timeline: [{ label: 'Reported', at: new Date() }] },
 ])
-console.log('Seed complete. Demo password: CivicPulse2026!')
+console.log('Seed complete. Authority password: admin. Other demo password: CivicPulse2026!')
 await mongoose.disconnect()

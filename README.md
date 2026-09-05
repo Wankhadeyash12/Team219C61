@@ -25,12 +25,14 @@ net start MongoDB
 
 ## Demo accounts
 
-All seeded accounts use password `CivicPulse2026!`:
+Seeded account passwords:
 
 - `citizen@demo.com`
-- `authority@demo.com`
+- `authority@demo.com` uses password `admin`
 - `worker@demo.com`
 - `admin@demo.com`
+
+The citizen, field worker, and admin accounts use password `CivicPulse2026!`.
 
 ## Commands
 
