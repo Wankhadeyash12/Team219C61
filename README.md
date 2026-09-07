@@ -46,7 +46,7 @@ The citizen, field worker, and admin accounts use password `CivicPulse2026!`.
 
 Copy `.env.example` to `.env` and set `MONGODB_URI` to your MongoDB Atlas connection string. `AI_PROVIDER` and `AI_API_KEY` are intentionally optional. Without a configured provider, the API returns an explicit unavailable response instead of claiming an AI result.
 
-For the deployed client, set `VITE_API_URL` and `VITE_SOCKET_URL` in Vercel to `https://team219c61-3.onrender.com`, then redeploy. The Render URL is the API service, so `/api/health` is the health check; the browser application itself is served by Vercel.
+For the deployed client, set `VITE_API_URL` and `VITE_SOCKET_URL` in Vercel to `https://team219c61.onrender.com`, then redeploy. The Render URL is the API service, so `/api/health` is the health check; the browser application itself is served by Vercel.
 
 ## Structure
 
