@@ -5,8 +5,8 @@ import { io } from 'socket.io-client'
 import 'leaflet/dist/leaflet.css'
 import './App.css'
 
-const API_URL = import.meta.env.VITE_API_URL || ''
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || window.location.origin
+const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://team219c61-3.onrender.com' : '')
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || (import.meta.env.PROD ? 'https://team219c61-3.onrender.com' : window.location.origin)
 const apiUrl = (path) => `${API_URL}${path}`
 
 const seedIssues = [

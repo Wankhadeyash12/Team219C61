@@ -10,9 +10,12 @@ import { Server } from 'socket.io'
 
 const app = express()
 const httpServer = createServer(app)
-const io = new Server(httpServer, { cors: { origin: process.env.CLIENT_URL || 'http://localhost:5173' } })
+const allowedOrigins = [process.env.CLIENT_URL, 'http://localhost:5173'].filter(Boolean)
+const isAllowedOrigin = (origin) => !origin || allowedOrigins.includes(origin) || /^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(origin)
+const corsOptions = { origin: (origin, callback) => callback(null, isAllowedOrigin(origin)) }
+const io = new Server(httpServer, { cors: corsOptions })
 mongoose.set('bufferCommands', false)
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }))
+app.use(cors(corsOptions))
 app.use(express.json({ limit: '2mb' }))
 app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1000, limit: 100 }))
 
@@ -33,6 +36,7 @@ const auth = async (req, res, next) => { try { const token = req.headers.authori
 const issueId = () => `CIV-${Math.floor(1000 + Math.random() * 8999)}`
 
 app.get('/api/health', (req, res) => res.json({ ok: true, service: 'CivicPulse API' }))
+app.get('/', (req, res) => res.json({ ok: true, service: 'CivicPulse API', health: '/api/health' }))
 app.post('/api/auth/register', async (req, res, next) => { try { const { name, email, password, role = 'CITIZEN' } = req.body; if (!name || !email || !password) return res.status(400).json({ message: 'Name, email and password are required' }); const user = await User.create({ name, email: email.toLowerCase(), password: await bcrypt.hash(password, 12), role }); res.status(201).json({ token: tokenFor(user), user: { id: user._id, name: user.name, email: user.email, role: user.role } }) } catch (error) { next(error) } })
 app.post('/api/auth/login', async (req, res, next) => { try { const user = await User.findOne({ email: req.body.email?.toLowerCase() }); if (!user || !(await bcrypt.compare(req.body.password || '', user.password))) return res.status(401).json({ message: 'Invalid credentials' }); res.json({ token: tokenFor(user), user: { id: user._id, name: user.name, email: user.email, role: user.role } }) } catch (error) { next(error) } })
 app.get('/api/auth/me', auth, async (req, res, next) => { try { res.json(await User.findById(req.user.id).select('-password')) } catch (error) { next(error) } })
